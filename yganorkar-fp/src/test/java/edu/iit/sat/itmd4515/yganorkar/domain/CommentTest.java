@@ -252,6 +252,9 @@ public class CommentTest {
         
     }
     
+    /**
+     *
+     */
     @After
     public void tearDown() {
         entityManager.close();

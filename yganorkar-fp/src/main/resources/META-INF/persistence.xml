@@ -4,6 +4,7 @@
     <jta-data-source>jdbc/itmd4515DS</jta-data-source>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
+      <property name="javax.persistence.sql-load-script-source" value="META-INF/sql/insert.sql"/>
     </properties>
   </persistence-unit>
 </persistence>

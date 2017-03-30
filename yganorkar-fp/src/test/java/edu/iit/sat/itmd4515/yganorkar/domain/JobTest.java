@@ -240,6 +240,9 @@ public class JobTest {
 
     }
         
+    /**
+     *
+     */
     @After
     public void tearDown() {
         Job job =  entityManager.createNamedQuery("Job.fetchAllRecordsByCompanyId", Job.class)

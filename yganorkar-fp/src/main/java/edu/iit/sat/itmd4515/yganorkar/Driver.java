@@ -23,6 +23,10 @@ public class Driver {
     
     private static final Logger LOGGER = Logger.getLogger(Driver.class.getName());
 
+    /**
+     *
+     * @param args
+     */
     public static void main(String[] args) {
         EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("itmd4515PU");
 

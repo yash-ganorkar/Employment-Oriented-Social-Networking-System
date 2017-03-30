@@ -25,15 +25,32 @@ import javax.validation.Payload;
 @Documented
 public @interface BlankValidator {
     
-        String message() default "Field cannot be empty.";
+    /**
+     *
+     * @return
+     */
+    String message() default "Field cannot be empty.";
 
-      Class<?>[] groups() default {};
-      Class<? extends Payload>[] payload() default {};
+    /**
+     *
+     * @return
+     */
+    Class<?>[] groups() default {};
+
+    /**
+     *
+     * @return
+     */
+    Class<? extends Payload>[] payload() default {};
         
-
-    
+    /**
+     *
+     */
     public  class BlankFieldValidator implements ConstraintValidator<BlankValidator, String>{
 
+        /**
+         *
+         */
         public BlankFieldValidator() {
         }
 

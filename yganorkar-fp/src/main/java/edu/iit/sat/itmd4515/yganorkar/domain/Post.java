@@ -50,29 +50,29 @@ public class Post {
     @Size(min=20, max = 200, message = "Description should be minimum 20 characters and max of 200 characters.")
     private String description;
 
-    private User user;
+    private UserProfile userprofile;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.PERSIST)
     private List<Comment> comment;
     
     /**
-     * Get the value of user
+     * Get the value of userprofile
      *
-     * @return the value of user
+     * @return the value of userprofile
      */
 
-    public User getUser() {
-        return user;
+    public UserProfile getUserprofile() {
+        return userprofile;
     }
 
     /**
-     * Set the value of user
+     * Set the value of userprofile
      *
-     * @param user new value of user
+     * @param userprofile new value of userprofile
      */
     
-    public void setUser(User user) {
-        this.user = user;
+    public void setUserprofile(UserProfile userprofile) {
+        this.userprofile = userprofile;
     }
 
     /**
@@ -95,9 +95,13 @@ public class Post {
         this.comment = comment;
     }
     
-    
-    
-    
+    /**
+     *
+     * @param userId
+     * @param likes
+     * @param createdAt
+     * @param description
+     */
     public Post(Long userId, Integer likes, Date createdAt, String description) {
         this.userId = userId;
         this.likes = likes;
@@ -177,13 +181,24 @@ public class Post {
         this.userId = userId;
     }
 
+    /**
+     *
+     */
     public Post() {
     }
 
+    /**
+     *
+     * @return
+     */
     public Long getPostId() {
         return postId;
     }
 
+    /**
+     *
+     * @param postId
+     */
     public void setPostId(Long postId) {
         this.postId = postId;
     }

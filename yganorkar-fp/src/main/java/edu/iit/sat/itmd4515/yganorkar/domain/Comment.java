@@ -51,34 +51,42 @@ public class Comment {
     @Past(message = "Date cannot be Past Date.")
     private Date createdAt;
     
-    private User user;
+    private UserProfile userprofile;
     
     private Post post;
 
+    /**
+     *
+     * @return
+     */
     public Post getPost() {
         return post;
     }
 
+    /**
+     *
+     * @param post
+     */
     public void setPost(Post post) {
         this.post = post;
     }
 
     /**
-     * Get the value of user
+     * Get the value of userprofile
      *
-     * @return the value of user
+     * @return the value of userprofile
      */
-    public User getUser() {
-        return user;
+    public UserProfile getUserprofile() {
+        return userprofile;
     }
 
     /**
-     * Set the value of user
+     * Set the value of userprofile
      *
-     * @param user new value of user
+     * @param userprofile new value of userprofile
      */
-    public void setUser(User user) {
-        this.user = user;
+    public void setUserprofile(UserProfile userprofile) {
+        this.userprofile = userprofile;
     }    
     /**
      * Get the value of createdAt
@@ -152,10 +160,18 @@ public class Comment {
         this.postId = postId;
     }
 
+    /**
+     *
+     * @return
+     */
     public Long getCommentId() {
         return commentId;
     }
 
+    /**
+     *
+     * @param commentId
+     */
     public void setCommentId(Long commentId) {
         this.commentId = commentId;
     }
@@ -165,6 +181,13 @@ public class Comment {
         return "Comment{" + "commentId=" + commentId + ", postId=" + postId + ", commentContent=" + commentContent + ", userId=" + userId + ", createdAt=" + createdAt + '}';
     }
 
+    /**
+     *
+     * @param postId
+     * @param commentContent
+     * @param userId
+     * @param createdAt
+     */
     public Comment(Long postId, String commentContent, Long userId, Date createdAt) {
         this.postId = postId;
         this.commentContent = commentContent;
@@ -172,7 +195,9 @@ public class Comment {
         this.createdAt = createdAt;
     }    
     
-
+    /**
+     *
+     */
     public Comment() {
     }
     

@@ -75,7 +75,7 @@ public class CompanyTest {
         entityManager = entityManagerFactory.createEntityManager();
         entityTransaction = entityManager.getTransaction();
 
-        Company company = new Company("Wayne Enterprises", "brucewayne", "iambatman", "brucewayne@wayneenterprises.com", "Gotham", 1000, "Government", "Owned by famous Bruce Wayne.", new GregorianCalendar(2000,5,7).getTime());
+        Company company = new Company("Wayne Enterprises", "brucewayne@wayneenterprises.com", "Gotham", 1000, "Government", "Owned by famous Bruce Wayne.", new GregorianCalendar(2000,5,7).getTime());
         entityTransaction.begin();
         entityManager.persist(company);
         entityTransaction.commit();
@@ -89,7 +89,7 @@ public class CompanyTest {
     
     @Test(expected = RollbackException.class)
     public void persistNewCompanyTest(){
-        Company company = new Company("Stark Industries", "tonystark", "iamaavenger", "tonystark@starkindustries.com", "New York City", 100, "Private", "Owned by famous Tony Stark.", new GregorianCalendar(1950,5,7).getTime());
+        Company company = new Company("Stark Industries", "tonystark@starkindustries.com", "New York City", 100, "Private", "Owned by famous Tony Stark.", new GregorianCalendar(1950,5,7).getTime());
         
         entityTransaction.begin();
         assertNull("Company ID must be null" , company.getCompanyId());
@@ -98,13 +98,13 @@ public class CompanyTest {
         
         assertTrue("Company ID must be greater than 0." , company.getCompanyId() > 0);
         
-        company = new Company("LexCorp", "lexluthor", "lexluthor", "lexluthor@lexcorp.com", "Metropolis", 1000, "Private", "Owned by famous Alexander Luthor.", new GregorianCalendar(1950,5,7).getTime());
+        company = new Company("LexCorp", "lexluthor@lexcorp.com", "Metropolis", 1000, "Private", "Owned by famous Alexander Luthor.", new GregorianCalendar(1950,5,7).getTime());
         entityTransaction.begin();
         entityManager.persist(company);
         entityTransaction.commit();
 
 
-        company = new Company("Wayne Enterprises", "brucewayne", "iambatman", "brucewayne@wayneenterprises.com", "Gotham", 1000, "Government", "Owned by famous Bruce Wayne.", new GregorianCalendar(2000,5,7).getTime());
+        company = new Company("Wayne Enterprises", "brucewayne@wayneenterprises.com", "Gotham", 1000, "Government", "Owned by famous Bruce Wayne.", new GregorianCalendar(2000,5,7).getTime());
         entityTransaction.begin();
         entityManager.persist(company);
         entityTransaction.commit();
@@ -143,14 +143,12 @@ public class CompanyTest {
                                          .getSingleResult();
         
         company.setDescription("Destroyed by himself.");
-        company.setPassword("alfredpennyworth");
         assertSame("Gotham", company.getLocation());
 
         
         entityTransaction.begin();
         entityManager.createNamedQuery("Company.updateDescriptionAndPasswordByEmail", Company.class)
                      .setParameter("value1", company.getDescription())
-                     .setParameter("value2", company.getPassword())
                      .setParameter("value3", company.getEmail())
                      .executeUpdate();
         entityManager.refresh(company);
@@ -209,37 +207,37 @@ public class CompanyTest {
         LOGGER.info(company.toString());
     }
 
-    /**
-     * Bean validation checking for length of the username field in Company entity. Sunny day test case.
-     */    
-    @Test
-    public void validateUsername(){
-
-        Company company = new Company("Stark Industries", "tonystark", "iamaavenger", "tonystark@starkindustries.com", "New York City", 100, "Private", "Owned by famous Tony Stark.", new GregorianCalendar(1950,5,7).getTime());        
-        
-        Set<ConstraintViolation<Company>> violations = validator.validate(company);
-        assertTrue(violations.isEmpty());
-
-    }
-
-    /**
-     * Bean validation checking for length of the username field in Company entity. Rainy day test case.
-     */    
-    @Test
-    public void validateUsernameRainyDay(){
-
-        Company company = new Company("Stark Industries", "ton", "iamaavenger", "tonystark@starkindustries.com", "New York City", 100, "Private", "Owned by famous Tony Stark.", new GregorianCalendar(1950,5,7).getTime());        
-        
-        Set<ConstraintViolation<Company>> violations = validator.validate(company);
-
-        for(ConstraintViolation<Company> constraintViolation : violations){
-            LOGGER.log(Level.WARNING,constraintViolation.getMessage().toUpperCase());
-        }        
-        
-        assertFalse(violations.isEmpty());
-        
-        assertEquals(violations.size(), 1);
-    }
+//    /**
+//     * Bean validation checking for length of the username field in Company entity. Sunny day test case.
+//     */    
+//    @Test
+//    public void validateUsername(){
+//
+//        Company company = new Company("Stark Industries", "tonystark", "iamaavenger", "tonystark@starkindustries.com", "New York City", 100, "Private", "Owned by famous Tony Stark.", new GregorianCalendar(1950,5,7).getTime());        
+//        
+//        Set<ConstraintViolation<Company>> violations = validator.validate(company);
+//        assertTrue(violations.isEmpty());
+//
+//    }
+//
+//    /**
+//     * Bean validation checking for length of the username field in Company entity. Rainy day test case.
+//     */    
+//    @Test
+//    public void validateUsernameRainyDay(){
+//
+//        Company company = new Company("Stark Industries", "ton", "iamaavenger", "tonystark@starkindustries.com", "New York City", 100, "Private", "Owned by famous Tony Stark.", new GregorianCalendar(1950,5,7).getTime());        
+//        
+//        Set<ConstraintViolation<Company>> violations = validator.validate(company);
+//
+//        for(ConstraintViolation<Company> constraintViolation : violations){
+//            LOGGER.log(Level.WARNING,constraintViolation.getMessage().toUpperCase());
+//        }        
+//        
+//        assertFalse(violations.isEmpty());
+//        
+//        assertEquals(violations.size(), 1);
+//    }
 
     /**
      * Bean validation checking for strength of the company in Company entity. Sunny day test case.
@@ -248,7 +246,7 @@ public class CompanyTest {
     @Test
     public void validateStrength(){
 
-        Company company = new Company("Stark Industries", "tonystark", "iamaavenger", "tonystark@starkindustries.com", "New York City", 10000, "Private", "Owned by famous Tony Stark.", new GregorianCalendar(1950,5,7).getTime());        
+        Company company = new Company("Stark Industries", "tonystark@starkindustries.com", "New York City", 10000, "Private", "Owned by famous Tony Stark.", new GregorianCalendar(1950,5,7).getTime());        
         
         Set<ConstraintViolation<Company>> violations = validator.validate(company);
         assertTrue(violations.isEmpty());        
@@ -263,7 +261,7 @@ public class CompanyTest {
     @Test
     public void validateStrengthRainyDay(){
 
-        Company company = new Company("Stark Industries", "ton", "iamaavenger", "tonystark@starkindustries.com", "New York City", 1000000000, "Private", "Owned by famous Tony Stark.", new GregorianCalendar(1950,5,7).getTime());        
+        Company company = new Company("Stark Industries", "tonystark@starkindustries.com", "New York City", 1000000000, "Private", "Owned by famous Tony Stark.", new GregorianCalendar(1950,5,7).getTime());        
         
         Set<ConstraintViolation<Company>> violations = validator.validate(company);
  
@@ -272,7 +270,7 @@ public class CompanyTest {
         }        
         
         assertFalse(violations.isEmpty());        
-        assertEquals(violations.size(), 2);
+        assertEquals(violations.size(), 1);
 
     }
 
@@ -298,6 +296,9 @@ public class CompanyTest {
         entityTransaction.commit();        
     }
     
+    /**
+     *
+     */
     @After
     public void tearDown() {
         Company company =  entityManager.createNamedQuery("Company.fetchAllRecordsByEmail", Company.class)

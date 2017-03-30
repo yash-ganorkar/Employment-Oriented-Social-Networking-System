@@ -5,6 +5,7 @@
  */
 package edu.iit.sat.itmd4515.yganorkar.domain;
 
+import edu.iit.sat.itmd4515.yganorkar.domain.security.User;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.CascadeType;
@@ -13,9 +14,11 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -35,7 +38,9 @@ import javax.validation.constraints.Size;
 @NamedQueries({
         @NamedQuery(name = "Company.fetchAllRecords", query = "SELECT c from Company c"),
         @NamedQuery(name = "Company.fetchAllRecordsByEmail", query = "SELECT c from Company c where c.email = :value1"),
-        @NamedQuery(name = "Company.updateDescriptionAndPasswordByEmail", query = "update Company set description = :value1, password = :value2 where email = :value3")
+        @NamedQuery(name = "Company.updateDescriptionAndPasswordByEmail", query = "update Company set description = :value1 where email = :value3"),
+        
+        @NamedQuery(name = "Company.findByUsername", query = "select c from Company c where c.user.userName = :username")
 })
 public class Company {
 
@@ -46,13 +51,6 @@ public class Company {
     private String companyName;
 
     @Column(unique = true)
-    @NotNull(message = "Username field cannot be null.")
-    @Size(min = 4, max = 12, message = "Username must be between 4 characters and 12 characters.")
-    private String username;
-    
-    @Size(min = 8, max = 25, message = "Password must be between 8 characters and 25 characters.")
-    private String password;
-
     private String email;
 
     private String location;
@@ -72,7 +70,20 @@ public class Company {
     @OneToMany(mappedBy = "company", cascade = CascadeType.PERSIST)
     private List<Job> job;
     
+    private UserProfile userprofile;
+    
+    @OneToOne
+    @JoinColumn(name = "USERNAME")
     private User user;
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
 
     /**
      * Gets the list of jobs
@@ -93,10 +104,18 @@ public class Company {
         this.job = job;
     }
 
-    public Company(String companyName, String username, String password, String email, String location, Integer strength, String companyType, String description, Date createdAt) {
+    /**
+     *
+     * @param companyName
+     * @param email
+     * @param location
+     * @param strength
+     * @param companyType
+     * @param description
+     * @param createdAt
+     */
+    public Company(String companyName, String email, String location, Integer strength, String companyType, String description, Date createdAt) {
         this.companyName = companyName;
-        this.username = username;
-        this.password = password;
         this.email = email;
         this.location = location;
         this.strength = strength;
@@ -216,42 +235,6 @@ public class Company {
     }
 
     /**
-     * Get the value of password
-     *
-     * @return the value of password
-     */
-    public String getPassword() {
-        return password;
-    }
-
-    /**
-     * Set the value of password
-     *
-     * @param password new value of password
-     */
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    /**
-     * Get the value of username
-     *
-     * @return the value of username
-     */
-    public String getUsername() {
-        return username;
-    }
-
-    /**
-     * Set the value of username
-     *
-     * @param username new value of username
-     */
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    /**
      * Get the value of companyName
      *
      * @return the value of companyName
@@ -269,19 +252,30 @@ public class Company {
         this.companyName = companyName;
     }
 
+    /**
+     *
+     */
     public Company() {
     }
 
+    /**
+     *
+     * @return
+     */
     public Long getCompanyId() {
         return companyId;
     }
 
+    /**
+     *
+     * @param companyId
+     */
     public void setCompanyId(Long companyId) {
         this.companyId = companyId;
     }
 
     @Override
     public String toString() {
-        return "Company{" + "companyId=" + companyId + ", companyName=" + companyName + ", username=" + username + ", password=" + password + ", email=" + email + ", location=" + location + ", strength=" + strength + ", companyType=" + companyType + ", description=" + description + ", createdAt=" + createdAt + '}';
+        return "Company{" + "companyId=" + companyId + ", companyName=" + companyName + ", email=" + email + ", location=" + location + ", strength=" + strength + ", companyType=" + companyType + ", description=" + description + ", createdAt=" + createdAt + '}';
     }
 }

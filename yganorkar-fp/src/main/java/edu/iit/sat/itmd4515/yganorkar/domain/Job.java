@@ -54,28 +54,28 @@ public class Job {
     @Past(message = "Date cannot be Past Date.")    
     private Date createdAt;
     
-    private User user;
+    private UserProfile userprofile;
     
     @ManyToOne
     private Company company;
     
 
     /**
-     * Get the value of user
+     * Get the value of userprofile
      *
-     * @return the value of user
+     * @return the value of userprofile
      */
-    public User getUser() {
-        return user;
+    public UserProfile getUserprofile() {
+        return userprofile;
     }
 
     /**
-     * Set the value of user
+     * Set the value of userprofile
      *
-     * @param user new value of user
+     * @param userprofile new value of userprofile
      */
-    public void setUser(User user) {
-        this.user = user;
+    public void setUserprofile(UserProfile userprofile) {
+        this.userprofile = userprofile;
     }
 
     /**
@@ -99,10 +99,21 @@ public class Job {
         this.company = company;
     }
 
-
+    /**
+     *
+     */
     public Job() {
     }
 
+    /**
+     *
+     * @param companyId
+     * @param jobDescription
+     * @param jobType
+     * @param experienceLevel
+     * @param salary
+     * @param createdAt
+     */
     public Job(Long companyId, String jobDescription, String jobType, String experienceLevel, Double salary, Date createdAt) {
         this.companyId = companyId;
         this.jobDescription = jobDescription;
@@ -221,10 +232,18 @@ public class Job {
         this.companyId = companyId;
     }
 
+    /**
+     *
+     * @return
+     */
     public Long getJobId() {
         return jobId;
     }
 
+    /**
+     *
+     * @param jobId
+     */
     public void setJobId(Long jobId) {
         this.jobId = jobId;
     }

@@ -6,8 +6,9 @@
     <class>edu.iit.sat.itmd4515.yganorkar.domain.Company</class>
     <class>edu.iit.sat.itmd4515.yganorkar.domain.Job</class>
     <class>edu.iit.sat.itmd4515.yganorkar.domain.Post</class>
-    <class>edu.iit.sat.itmd4515.yganorkar.domain.User</class>
     <class>edu.iit.sat.itmd4515.yganorkar.domain.UserProfile</class>
+    <class>edu.iit.sat.itmd4515.yganorkar.domain.security.Group</class>
+    <class>edu.iit.sat.itmd4515.yganorkar.domain.security.User</class>
     <exclude-unlisted-classes>true</exclude-unlisted-classes>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/itmd4515?zeroDateTimeBehavior=convertToNull"/>
