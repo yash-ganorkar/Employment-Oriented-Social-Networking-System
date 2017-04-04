@@ -5,6 +5,8 @@
  */
 package edu.iit.sat.itmd4515.yganorkar.domain.security;
 
+import com.google.common.hash.Hashing;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Column;
@@ -13,6 +15,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 
 /**
@@ -45,6 +49,15 @@ public class User {
                 group.getUsers().add(this);
             }
 
+        }
+        
+        @PrePersist
+        @PreUpdate
+        private void passwordHash(){
+            String sha256Password = Hashing.sha256()
+                            .hashString(this.password, StandardCharsets.UTF_8)
+                            .toString();
+            this.password = sha256Password;
         }
     /**
      * Get the value of groups

@@ -4,9 +4,9 @@
 INSERT IGNORE INTO sec_group(GROUPNAME,GROUPDESCRIPTION) VALUES ("CompanyEmployees", "This group is for company employees");
 INSERT IGNORE INTO sec_group(GROUPNAME,GROUPDESCRIPTION) VALUES ("ApplicationUsers", "This group is for job seekers");
 
-INSERT IGNORE INTO sec_user(USERNAME,PASSWORD) VALUES ("amansingh","amansingh");
-INSERT IGNORE INTO sec_user(USERNAME,PASSWORD) VALUES ("yashganorkar","batmanrules");
-INSERT IGNORE INTO sec_user(USERNAME,PASSWORD) VALUES ("tonystark","iamironman");
+INSERT IGNORE INTO sec_user(USERNAME,PASSWORD) VALUES ("amansingh",SHA2("amansingh",256));
+INSERT IGNORE INTO sec_user(USERNAME,PASSWORD) VALUES ("yashganorkar",SHA2("batmanrules",256));
+INSERT IGNORE INTO sec_user(USERNAME,PASSWORD) VALUES ("tonystark",SHA2("iamironman",256));
 
 INSERT IGNORE INTO sec_user_groups (GROUPNAME,USERNAME) VALUES ("ApplicationUsers","amansingh");
 INSERT IGNORE INTO sec_user_groups (GROUPNAME,USERNAME) VALUES ("ApplicationUsers","yashganorkar");
