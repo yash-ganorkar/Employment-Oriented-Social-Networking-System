@@ -1,0 +1,129 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./../WEB-INF/templates/authnTheme.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="title">
+    </ui:define>
+
+    <ui:define name="content">
+        <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">            
+            <div class="container">
+                <!-- Brand and toggle get grouped for better mobile display -->
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="#">EOSON</a>
+                </div>
+                <!-- Collect the nav links, forms, and other content for toggling -->
+                <div class="col-sm-5 col-md-5">
+                </div>     
+
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav pull-right">
+                        <li>
+                            <a href="#">Home</a>
+                        </li>                                
+                        <li>
+                            <a href="#">Profile</a>
+                        </li>
+                        <li>
+                            <a href="#">Jobs</a>
+                        </li>
+                        <li>
+                            <span class="glyphicon glyphicon-user" style="margin-top: 17px; margin-left: 10px; width: 20px;" aria-hidden="true"></span>
+                        </li>                        
+                        <li style="margin-top: 10px;">
+                            <h:form>
+                                <h:commandLink action="#{loginController.performLogout()}" style="margin-left: 25px;" value="Sign out"></h:commandLink>
+                            </h:form>
+                        </li>
+                    </ul>
+                </div>
+                <!-- /.navbar-collapse -->
+            </div>
+            <!-- /.container -->
+        </nav>
+
+        <div class="container" style="background-color: rgb(51,122,183); width: 100%; height: 100%; margin-top: 0%;">
+            <!-- Jumbotron Header -->
+            <header class="jumbotron hero-spacer">
+                <div class="row">
+                    <div class="col-sm-10" style="width: 100%;">
+                        <div class="form-box-jobs">
+                            <div class="form-top">
+                                <div class="form-top-center">
+                                    <h3 style="text-align: center;">List of Jobs</h3>
+                                </div>
+                                <div class="form-top-right">
+                                    <i class="fa fa-lock"></i>
+                                </div>
+                            </div>
+                            <div class="form-bottom">
+                                <h:dataTable class="table table-bordered" style="color: white;" value="#{companyService.findAllJobsByCompanyID(companyService.getByUsername(request.remoteUser))}" var="jobs">
+                                    <h:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="Title" />    
+                                        </f:facet>
+                                        <h:outputText value="#{jobs.jobType}" /> 
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="Experience Level" />    
+                                        </f:facet>
+                                        <h:outputText value="#{jobs.experienceLevel}" /> 
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="Description" />    
+                                        </f:facet>
+                                        <h:outputText value="#{jobs.jobDescription}" /> 
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="Salary" />    
+                                        </f:facet>
+                                        <h:outputText value="#{jobs.salary}" /> 
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="Created AT" />    
+                                        </f:facet>
+                                        <h:outputText value="#{jobs.createdAt}">
+                                            <f:convertDateTime type="both" dateStyle="short" timeStyle="full"  timeZone="#{config.currentTimeZone}"/>
+                                        </h:outputText>
+                                    </h:column>                                    
+                                    <h:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="Number of Applicants" />    
+                                        </f:facet>
+                                        <h:outputText value="#{companyService.findAllJobsCountById()}"/>
+                                    </h:column>                                    
+                                </h:dataTable>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+            <!-- Footer -->
+            <div class="navbar-inverse navbar-fixed-bottom">
+                <!--<div class="row">-->
+                <!--<div class="col-lg-12">-->
+                <p>Copyright &copy; EOSON</p>
+                <!--</div>-->
+                <!--</div>-->
+            </div>
+        </div>
+        <!-- /.container -->
+
+    </ui:define>
+
+</ui:composition>

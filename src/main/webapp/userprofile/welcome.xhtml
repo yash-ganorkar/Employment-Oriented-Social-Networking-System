@@ -1,0 +1,135 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./../WEB-INF/templates/authnTheme.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
+
+    <ui:define name="title">
+    </ui:define>
+
+    <ui:define name="content">
+        <!--                 Navigation -->
+        <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">            
+            <div class="container">
+                <!-- Brand and toggle get grouped for better mobile display -->
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="#">EOSON</a>
+                </div>
+                <!-- Collect the nav links, forms, and other content for toggling -->
+                <div class="col-sm-5 col-md-5">
+                    <form class="navbar-form" role="search">
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="Search" name="srch-term" id="srch-term" />
+                            <div class="input-group-btn">
+                                <button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search"></i></button>
+                            </div>
+                        </div>
+                    </form>
+                </div>     
+
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav pull-right">
+                        <li>
+                            <a href="#">Home</a>
+                        </li>                                
+                        <li>
+                            <a href="#">Profile</a>
+                        </li>
+                        <li>
+                            <a href="#">Jobs</a>
+                        </li>
+                        <li>
+                            <span class="glyphicon glyphicon-user" style="margin-top: 17px; margin-left: 10px; width: 20px;" aria-hidden="true"></span>
+                        </li>                        
+                        <li style="margin-top: 10px;">
+                            <h:form>
+                                <h:commandLink action="#{loginController.performLogout()}" style="margin-left: 25px;" value="Sign out"></h:commandLink>
+                            </h:form>
+                        </li>
+
+                    </ul>
+
+
+                </div>
+                <!-- /.navbar-collapse -->
+            </div>
+            <!-- /.container -->
+        </nav>
+
+        <!-- Page Content -->
+        <div class="container" style="background-color: rgb(51,122,183); width: 100%; height: 100%; margin-top: 0%;">
+            <!-- Jumbotron Header -->
+            <header class="jumbotron hero-spacer">
+                <div class="row">
+                    <div class="col-sm-10" style="width: 60%; margin-left: 10%;">
+
+                        <div class="form-box">
+                            <div class="form-top">
+                                <div class="form-top-center">
+                                    <h3 style="text-align: center;">Profile</h3>
+                                </div>
+                                <div class="form-top-right">
+                                    <i class="fa fa-lock"></i>
+                                </div>
+                            </div>
+                            <div class="form-bottom">
+                                <h:form class="login-form">
+                                    <h:panelGroup layout="block" class="form-group">
+                                        <h:inputText class="form-username form-control" pt:placeholder="First Name" id="firstName" ></h:inputText>
+                                        <h:message for="firstName" class="errorMessage"/>
+                                    </h:panelGroup>
+                                    <h:panelGroup layout="block" class="form-group">
+                                        <h:inputText class="form-username form-control" pt:placeholder="Last Name" id="lastName" ></h:inputText>
+                                        <h:message for="lastName" class="errorMessage"/>
+                                    </h:panelGroup>
+                                    <h:panelGroup layout="block" class="form-group">
+                                        <h:inputTextarea class="form-username form-control" pt:placeholder="Street Address" id="streetAddress" ></h:inputTextarea>
+                                        <h:message for="streetAddress" class="errorMessage"/>
+                                    </h:panelGroup>                                    
+                                    <h:panelGroup layout="block" class="form-group">
+                                        <h:inputText class="form-username form-control" pt:placeholder="City" id="city" ></h:inputText>
+                                        <h:message for="city" class="errorMessage"/>
+                                    </h:panelGroup>                                    
+                                    <h:panelGroup layout="block" class="form-group">
+                                        <h:inputText class="form-username form-control" pt:placeholder="State" id="state" ></h:inputText>
+                                        <h:message for="state" class="errorMessage"/>
+                                    </h:panelGroup>                                    
+                                    <h:panelGroup layout="block" class="form-group">
+                                        <h:inputText class="form-username form-control" pt:placeholder="Country" id="country" ></h:inputText>
+                                        <h:message for="country" class="errorMessage"/>
+                                    </h:panelGroup>                                    
+                                    <h:panelGroup layout="block" class="form-group">
+                                        <h:inputText class="form-username form-control" pt:placeholder="Email" id="email" ></h:inputText>
+                                        <h:message for="email" class="errorMessage"/>
+                                    </h:panelGroup>                                                                        
+                                    <h:commandButton class="btn" value="Sign in" action="#{loginController.performLogin( )}"></h:commandButton>
+                                </h:form>
+                                <!--                                        <a href="http://localhost:8080/yganorkar-fp/userprofile/createuseraccount.html" role="button" class="btn btn-primary">Register</a>-->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+            <!-- Footer -->
+            <div class="navbar-inverse navbar-fixed-bottom">
+                <!--<div class="row">-->
+                <!--<div class="col-lg-12">-->
+                <p>Copyright &copy; EOSON</p>
+                <!--</div>-->
+                <!--</div>-->
+            </div>
+        </div>
+        <!-- /.container -->
+
+    </ui:define>
+
+</ui:composition>

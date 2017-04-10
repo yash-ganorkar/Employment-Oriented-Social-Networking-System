@@ -1,0 +1,89 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./WEB-INF/templates/publicTheme.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
+    
+    <ui:define name="title">
+        Register
+    </ui:define>
+
+    <ui:define name="content">
+        <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+            <div class="container">
+                <!--                         Brand and toggle get grouped for better mobile display -->
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="#">EOSON</a>
+                </div>
+                <!--                         Collect the nav links, forms, and other content for toggling -->
+
+                <!--/.navbar-collapse -->
+            </div>
+            <!-- /.container -->
+        </nav>
+        
+        <div class="container" style="background-color: rgb(51,122,183); width: 100%; height: 100%; margin-top: 0%;">
+            <!-- Jumbotron Header -->
+            <header class="jumbotron hero-spacer">
+                <div class="row">
+                    <div class="col-sm-10" style="width: 60%; margin-left: 10%;">
+                        <div class="form-box">
+                            <div class="form-top">
+                                <div class="form-top-center">
+                                    <h3 style="text-align: center;">Register as Job Seeker</h3>
+                                </div>
+                                <div class="form-top-right">
+                                    <i class="fa fa-lock"></i>
+                                </div>
+                            </div>
+                            <div class="form-bottom">
+                                <h:form class="login-form">
+                                    <h:panelGroup layout="block" class="form-group">
+                                        <h:inputText class="form-username form-control" pt:placeholder="First Name" id="firstName" ></h:inputText>
+                                        <h:message for="firstName" class="errorMessage"/>
+                                    </h:panelGroup>
+                                    <h:panelGroup layout="block" class="form-group">
+                                        <h:inputText class="form-username form-control" pt:placeholder="Last Name" id="lastName" ></h:inputText>
+                                        <h:message for="lastName" class="errorMessage"/>
+                                    </h:panelGroup>
+                                    <h:panelGroup layout="block" class="form-group">
+                                        <h:inputText class="form-username form-control" pt:placeholder="Email" id="email" ></h:inputText>
+                                        <h:message for="email" class="errorMessage"/>
+                                    </h:panelGroup>
+                                    <h:panelGroup layout="block" class="form-group">
+                                        <h:inputText class="form-username form-control" pt:placeholder="Username" id="username" ></h:inputText>
+                                        <h:message for="username" class="errorMessage"/>
+                                    </h:panelGroup>                                                                        
+                                    <h:panelGroup layout="block" class="form-group">
+                                        <h:inputSecret class="form-username form-control" pt:placeholder="Password" id="password" ></h:inputSecret>
+                                        <h:message for="password" class="errorMessage"/>
+                                    </h:panelGroup>                                                                                                            
+                                    <h:commandButton class="btn" value="Register" onclick="alert('Job seeker will be registered...');"></h:commandButton>
+                                </h:form>
+                                <!--                                        <a href="http://localhost:8080/yganorkar-fp/userprofile/createuseraccount.html" role="button" class="btn btn-primary">Register</a>-->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+            <!-- Footer -->
+            <div class="navbar-inverse navbar-fixed-bottom">
+                <!--<div class="row">-->
+                <!--<div class="col-lg-12">-->
+                <p>Copyright &copy; EOSON</p>
+                <!--</div>-->
+                <!--</div>-->
+            </div>
+        </div>
+        <!-- /.container -->
+        
+    </ui:define>
+
+</ui:composition>
