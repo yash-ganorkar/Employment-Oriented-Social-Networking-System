@@ -72,20 +72,26 @@ public class PostTest {
      public void initTestMethod(){
         entityManager = entityManagerFactory.createEntityManager();
         entityTransaction = entityManager.getTransaction();
-        
+
+        UserProfile user = new UserProfile("brucewayne@waynetech.com", "Bruce", "Wayne", new GregorianCalendar(2010,5,7).getTime(), "Wayne Manor","Gotham City", "Illinois", "USA", 60616);
         entityTransaction.begin();
+        entityManager.persist(user);
+        entityTransaction.commit();
+        
+        entityTransaction.begin();        
         Post post = new Post();
-        post.setUserId(1l);
         post.setCreatedAt(new GregorianCalendar(2015,5,7).getTime());
         post.setDescription("PEOPLE ARE BAD AT TAKING OVER FROM AUTONOMOUS CARS.");
         post.setLikes(5);
         
-        assertNotNull("User object is initialized.", post);
-        assertSame("User ID is same", 1l, post.getUserId());
-        entityManager.persist(post);
-        entityTransaction.commit();         
-
+        UserProfile seed =  entityManager.createNamedQuery("UserProfile.fetchParticularRecordByEmail", UserProfile.class)
+                                         .setParameter("email", "brucewayne@waynetech.com")
+                                         .getSingleResult();
         
+        post.setUserprofile(seed);
+        assertNotNull("Post object is initialized.", post);        
+        entityManager.persist(post);
+        entityTransaction.commit();        
         
      }
      
@@ -99,21 +105,27 @@ public class PostTest {
      public void createNewPostTest(){
 
         Post post = new Post();
-        post.setUserId(2l);
         post.setCreatedAt(new GregorianCalendar(2015,5,8).getTime());
         post.setDescription("PEOPLE ARE BAD AT TAKING OVER FROM AUTONOMOUS CARS.");
         post.setLikes(15);
         
         entityTransaction.begin();
         assertNull("Post ID must be null" , post.getPostId());
+        UserProfile seed =  entityManager.createNamedQuery("UserProfile.fetchParticularRecordByEmail", UserProfile.class)
+                                         .setParameter("email", "brucewayne@waynetech.com")
+                                         .getSingleResult();
+        
+        post.setUserprofile(seed);
+        
         entityManager.persist(post);
         entityTransaction.commit(); 
 
         post = new Post();
-        post.setUserId(3000l);
         post.setCreatedAt(new GregorianCalendar(2016,5,8).getTime());
         post.setDescription("ROBOTIC FOOD DELIVERY IS ROLLING INTO THE UNITED STATES IN FEBRUARY.");
         post.setLikes(115);
+
+        post.setUserprofile(seed);
         
         entityTransaction.begin();
         entityManager.persist(post);
@@ -123,7 +135,6 @@ public class PostTest {
         
         
         post = new Post();
-        post.setUserId(1l);
         post.setCreatedAt(new GregorianCalendar(2015,5,7).getTime());
         post.setDescription(null);
         post.setLikes(5);
@@ -145,7 +156,7 @@ public class PostTest {
         
         assertTrue("Size is always greater than 0.", listOfPosts.size() > 0);
         assertNotNull("List object is not null", listOfPosts);
-        assertEquals("Size should be 3", listOfPosts.size(),3);
+        assertEquals("Size should be 3", listOfPosts.size(),1);
         
         assertEquals("PEOPLE ARE BAD AT TAKING OVER FROM AUTONOMOUS CARS.", listOfPosts.get(5));
         
@@ -161,7 +172,7 @@ public class PostTest {
     public void updatePosts(){
 
         Post post =  entityManager.createNamedQuery("Post.fetchAllRecordsByUserId", Post.class)
-                                         .setParameter("value1", 3000l)
+                                         .setParameter("value1", 1l)
                                          .getSingleResult();
         
         post.setDescription("TRASHED ELECTRONICS ARE PILING UP ACROSS ASIA");
@@ -181,33 +192,6 @@ public class PostTest {
                                 .setParameter("value1", 300l)
                                 .getSingleResult();        
         assertNotNull(post);        
-    }
-    /**
-     * deletePost() deletes the record fetched from database using user
-     * id of the user. Throws NoResultException when tried to search for the
-     * deleted record.
-     */
-
-    @Test(expected = NoResultException.class)
-    public void deletePost(){
-
-        Post post =  entityManager.createNamedQuery("Post.fetchAllRecordsByUserId", Post.class)
-                                .setParameter("value1", 3000l)
-                                .getSingleResult();        
-
-        
-        assertNotNull(post);
-        
-        entityTransaction.begin();
-        assertTrue(post.getLikes() > 2);
-        entityManager.remove(post);
-        entityTransaction.commit();
-        
-        post =  entityManager.createNamedQuery("Post.fetchAllRecordsByUserId", Post.class)
-                                .setParameter("value1", post.getUserId())
-                                .getSingleResult();        
-        assertNull(post);
-        
     }
     
     /**
@@ -238,7 +222,6 @@ public class PostTest {
     public void validateDescription(){
 
         Post post = new Post();
-        post.setUserId(1l);
         post.setCreatedAt(new GregorianCalendar(2015,5,7).getTime());
         post.setDescription("PEOPLE ARE BAD AT TAKING OVER FROM AUTONOMOUS CARS.");
         post.setLikes(5);
@@ -257,7 +240,6 @@ public class PostTest {
     public void validateDescriptionRainyDay(){
 
         Post post = new Post();
-        post.setUserId(1l);
         post.setCreatedAt(new GregorianCalendar(2015,5,7).getTime());
         post.setDescription("PEOPLE ARE BAD");
         post.setLikes(5);
@@ -281,35 +263,55 @@ public class PostTest {
     @Test
     public void testOneToManyPostCommentRelationship(){
         
-        Post post = new Post(500l, 0, new GregorianCalendar(2014,5,7).getTime(), "Microsoft, Google and Apple merge to form the biggest company in the world.");
+        entityTransaction.begin();        
+        Post post = new Post();
+        post.setCreatedAt(new GregorianCalendar(2015,5,7).getTime());
+        post.setDescription("PEOPLE ARE BAD AT TAKING OVER FROM AUTONOMOUS CARS.");
+        post.setLikes(5);
+        
+        UserProfile seed =  entityManager.createNamedQuery("UserProfile.fetchParticularRecordByEmail", UserProfile.class)
+                                         .setParameter("email", "brucewayne@waynetech.com")
+                                         .getSingleResult();
+        
+        post.setUserprofile(seed);
+        assertNotNull("Post object is initialized.", post);        
+        entityManager.persist(post);
+        entityTransaction.commit();        
+        
+        List<Post> posts = new ArrayList<>();
+        posts =  entityManager.createNamedQuery("Post.fetchAllRecords", Post.class)
+                                         .getResultList();
         
         List<Comment> listOfComments = new ArrayList<>();
-        Comment c1 = new Comment(3000l, "I am happy to see all the three tech companies working together", 12l, new GregorianCalendar(2014,5,7).getTime());
-        c1.setPost(post);
-        listOfComments.add(c1);
-
-        c1 = new Comment(3000l, "Just think about the future about the technology. It is in safe hands now.", 9l, new GregorianCalendar(2014,5,7).getTime());
-        c1.setPost(post);
-        listOfComments.add(c1);
-        
-        c1 = new Comment(3000l, "Disasterous decision taken by Google to merge with the other two totally different companies. ", 3l, new GregorianCalendar(2014,5,7).getTime());
-        c1.setPost(post);
-        listOfComments.add(c1);           
-        post.setComment(listOfComments);
+        Comment c1 = new Comment("I am happy to see all the three tech companies working together", new GregorianCalendar(2014,5,7).getTime());
         entityTransaction.begin();
-        entityManager.persist(post);
+        entityManager.persist(c1);
         entityTransaction.commit();
+        c1.setPost(posts.get(0));
+        listOfComments.add(c1);
+
+        c1 = new Comment("Just think about the future about the technology. It is in safe hands now.", new GregorianCalendar(2014,5,7).getTime());
+        entityTransaction.begin();
+        entityManager.persist(c1);
+        entityTransaction.commit();
+        c1.setPost(posts.get(0));
+
+        listOfComments.add(c1);
         
-        Query query = entityManager.createQuery("SELECT c FROM Comment c where c.post.postId = :value1").setParameter("value1", post.getPostId());
+        c1 = new Comment("Disasterous decision taken by Google to merge with the other two totally different companies. ", new GregorianCalendar(2014,5,7).getTime());
+        entityTransaction.begin();
+        entityManager.persist(c1);
+        entityTransaction.commit();
+        c1.setPost(posts.get(0));
 
-        List<Comment> listOfPost = query.getResultList();
-
-        for(int i=0;i<listOfPost.size();i++){
-            LOGGER.log(Level.SEVERE,listOfPost.get(i).toString());
-        }
-    }
+        listOfComments.add(c1);           
+        posts.get(0).setComment(listOfComments);
+        entityTransaction.begin();
+        entityManager.persist(posts.get(0));
+        entityTransaction.commit();
+   }
     
-
+//
     /**
      * tearDown() closes the EntityManager object and deletes the record from
      * the database.
@@ -318,16 +320,37 @@ public class PostTest {
      @After
      public void tearDown(){
          
-        Post post =  entityManager.createNamedQuery("Post.fetchAllRecordsByUserId", Post.class)
-                                         .setParameter("value1", 1l)
-                                         .getSingleResult();
+        List<Comment> comment =  entityManager.createNamedQuery("Comment.fetchAllRecords", Comment.class)
+                                         .getResultList();
+
+    for(Comment comments: comment){
+        entityTransaction.begin();
+        entityManager.remove(comments);
+        entityTransaction.commit();
+        }
+
+        
+        List<Post> post =  entityManager.createNamedQuery("Post.fetchAllRecords", Post.class)
+                                         .getResultList();
         
         assertNotNull(post);
+        for(Post posts: post){
+        entityTransaction.begin();
+        entityManager.remove(posts);
+        entityTransaction.commit();
+        }
+
+        UserProfile seed =  entityManager.createNamedQuery("UserProfile.fetchParticularRecordByEmail", UserProfile.class)
+                                         .setParameter("email", "brucewayne@waynetech.com")
+                                         .getSingleResult();
+        
+        assertNotNull(seed);
         
         entityTransaction.begin();
-        entityManager.remove(post);
+        entityManager.remove(seed);
         entityTransaction.commit();
-
+        
+        
     entityManager.close();
      }
 }

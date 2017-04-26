@@ -29,15 +29,28 @@
 
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                     <ul class="nav navbar-nav pull-right">
-                        <li>
-                            <a href="#">Home</a>
-                        </li>                                
-                        <li>
-                            <a href="#">Profile</a>
+                        <li style="margin-top: 10px;">
+                            <h:form>
+                                <h:commandLink action="#{navigationController.navigateToHome()}" style="margin-top: 17px; margin-left: 25px;" value="Home"></h:commandLink>                        
+                            </h:form>
                         </li>
-                        <li>
-                            <a href="#">Jobs</a>
+
+                        <li style="margin-top: 10px;">
+                            <h:form>
+                                <h:commandLink action="#{navigationController.navigateToProfile()}" style=" margin-top: 17px; margin-left: 25px;" value="Profile"></h:commandLink>
+                            </h:form>
                         </li>
+                        <li style="margin-top: 10px;">
+                            <h:form>
+                                <h:commandLink action="#{navigationController.navigateToJobs()}" style=" margin-top: 17px; margin-left: 25px;" value="Jobs"></h:commandLink>
+                            </h:form>
+                        </li>
+                        <li style="margin-top: 10px;">
+                            <h:form>
+                                <h:commandLink action="#{navigationController.navigateToAppliedJobs()}" style="margin-left: 25px;" value="Jobs Applied"></h:commandLink>
+                            </h:form>
+                        </li>
+
                         <li>
                             <span class="glyphicon glyphicon-user" style="margin-top: 17px; margin-left: 10px; width: 20px;" aria-hidden="true"></span>
                         </li>                        
@@ -46,9 +59,10 @@
                                 <h:commandLink action="#{loginController.performLogout()}" style="margin-left: 25px;" value="Sign out"></h:commandLink>
                             </h:form>
                         </li>
+
                     </ul>
-                </div>
-                <!-- /.navbar-collapse -->
+
+                </div>                
             </div>
             <!-- /.container -->
         </nav>
@@ -68,10 +82,11 @@
                                 </div>
                             </div>
                             <div class="form-bottom">
-                                <h:dataTable class="table table-bordered" style="color: white;" value="#{userProfileService.findAllJobs()}" var="jobs">
+                                <h:form class="login-form">
+                                    <h:dataTable class="table table-bordered" style="color: white;" value="#{userProfileController.findAllJobs()}" var="jobs">
                                     <h:column>
                                         <f:facet name="header">
-                                            <h:outputText value="Title" />    
+                                            <h:outputText value="Title" />
                                         </f:facet>
                                         <h:outputText value="#{jobs.jobType}" /> 
                                     </h:column>
@@ -95,13 +110,25 @@
                                     </h:column>
                                     <h:column>
                                         <f:facet name="header">
-                                            <h:outputText value="Created AT" />    
+                                            <h:outputText value="Created At" />    
                                         </f:facet>
                                         <h:outputText value="#{jobs.createdAt}">
                                             <f:convertDateTime type="both" dateStyle="short" timeStyle="full"  timeZone="#{config.currentTimeZone}"/>
                                         </h:outputText>
+                                    </h:column>
+                                    <h:column rendered="false">
+                                        <f:facet name="header">
+                                            <h:outputText value="Job ID" />    
+                                        </f:facet>
+                                        <h:outputText value="#{jobs.jobId}" binding="#{jobId}">
+                                        </h:outputText>
                                     </h:column>                                    
+                                    <h:column>
+                                        <h:commandButton class="btn btn-primary" value= "One-Click Apply" action="#{userProfileController.applyJob(jobId.value)}">
+                                        </h:commandButton>
+                                    </h:column>
                                 </h:dataTable>
+                            </h:form>                                    
                             </div>
                         </div>
                     </div>

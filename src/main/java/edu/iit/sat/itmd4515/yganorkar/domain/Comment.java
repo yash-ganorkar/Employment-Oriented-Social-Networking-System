@@ -27,10 +27,10 @@ import javax.validation.constraints.*;
 @NamedQueries 
         ({
             @NamedQuery(name = "Comment.fetchAllRecords" , query = "select c from Comment c"),
-            @NamedQuery(name = "Comment.fetchParticularRecordByUserId" , query = " select c from Comment c where c.userId = :userId"),
+            @NamedQuery(name = "Comment.fetchParticularRecordByUserId" , query = " select c from Comment c where c.userprofile.userId = :userId"),
             @NamedQuery(name = "Comment.fetchParticularRecordByCommentId" , query = " select c from Comment c where c.commentId = :commentId"),
-            @NamedQuery(name = "Comment.fetchParticularRecordByPostId" , query = " select c from Comment c where c.postId = :postId"),
-            @NamedQuery(name = "Comment.updateCommentContentByUserId" , query = " update Comment set commentContent = :value1 where userId = :value2")
+            @NamedQuery(name = "Comment.fetchParticularRecordByPostId" , query = " select c from Comment c where c.post.postId = :postId"),
+            @NamedQuery(name = "Comment.updateCommentContentByCommentId" , query = " update Comment set commentContent = :value1 where commentId = :value2")
                 
         })
 
@@ -39,20 +39,17 @@ public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long commentId;
-
-    private Long postId;
     
     @NotNull(message = "Comment cannot be null")
     private String commentContent;
 
-    private Long userId;
-
-    @Temporal(javax.persistence.TemporalType.DATE)
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     @Past(message = "Date cannot be Past Date.")
     private Date createdAt;
     
     private UserProfile userprofile;
     
+    @ManyToOne
     private Post post;
 
     /**
@@ -107,24 +104,6 @@ public class Comment {
     }
 
     /**
-     * Get the value of userId
-     *
-     * @return the value of userId
-     */
-    public Long getUserId() {
-        return userId;
-    }
-
-    /**
-     * Set the value of userId
-     *
-     * @param userId new value of userId
-     */
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
-
-    /**
      * Get the value of commentContent
      *
      * @return the value of commentContent
@@ -141,25 +120,6 @@ public class Comment {
     public void setCommentContent(String commentContent) {
         this.commentContent = commentContent;
     }
-
-    /**
-     * Get the value of postId
-     *
-     * @return the value of postId
-     */
-    public Long getPostId() {
-        return postId;
-    }
-
-    /**
-     * Set the value of postId
-     *
-     * @param postId new value of postId
-     */
-    public void setPostId(Long postId) {
-        this.postId = postId;
-    }
-
     /**
      *
      * @return
@@ -178,20 +138,16 @@ public class Comment {
 
     @Override
     public String toString() {
-        return "Comment{" + "commentId=" + commentId + ", postId=" + postId + ", commentContent=" + commentContent + ", userId=" + userId + ", createdAt=" + createdAt + '}';
+        return "Comment{" + "commentId=" + commentId + ", commentContent=" + commentContent + ", createdAt=" + createdAt + '}';
     }
 
     /**
      *
-     * @param postId
      * @param commentContent
-     * @param userId
      * @param createdAt
      */
-    public Comment(Long postId, String commentContent, Long userId, Date createdAt) {
-        this.postId = postId;
+    public Comment(String commentContent, Date createdAt) {
         this.commentContent = commentContent;
-        this.userId = userId;
         this.createdAt = createdAt;
     }    
     
@@ -200,6 +156,4 @@ public class Comment {
      */
     public Comment() {
     }
-    
-    
 }

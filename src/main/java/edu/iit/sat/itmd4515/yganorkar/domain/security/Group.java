@@ -10,12 +10,19 @@ import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 /**
  *
  * @author Yash
  */
+@NamedQueries 
+        ({
+            @NamedQuery(name = "Group.fetchAllRecords" , query = "select u from Group u"),
+        })
+
 @Entity
 @Table(name = "sec_group")
 public class Group {

@@ -36,6 +36,8 @@ import javax.validation.constraints.Past;
         @NamedQuery(name = "Job.fetchAllRecords", query = "SELECT j from Job j"),
         @NamedQuery(name = "Job.fetchAllRecordsByDate", query = "SELECT j from Job j where j.createdAt = :value1"),
         @NamedQuery(name = "Job.fetchAllRecordsByCompanyId", query = "SELECT j from Job j where j.company.companyId = :value1"),
+        @NamedQuery(name = "Job.fetchAllRecordsByJobId", query = "SELECT j from Job j where j.jobId = :value1"),
+        @NamedQuery(name = "Job.fetchLastAddedRecordByCompanyId", query = "SELECT j from Job j where j.company.companyId = :value1 order by j.jobId desc"),
         @NamedQuery(name = "Job.updateExperienceLevelAndSalaryByJobId", query = "update Job set experienceLevel = :value1, salary = :value2 where jobId = :value3")
 })
 
@@ -55,11 +57,11 @@ public class Job {
     private Double salary;
 
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
-    @Past(message = "Date cannot be Past Date.")    
+//    @Past(message = "Date cannot be Past Date.")    
     @Column(unique = true)
     private Date createdAt;
     
-    @ManyToMany(mappedBy = "job", cascade = CascadeType.PERSIST)
+    @ManyToMany(mappedBy = "job", cascade = CascadeType.ALL)
     private List<UserProfile> userprofile = new ArrayList<>();
     
     

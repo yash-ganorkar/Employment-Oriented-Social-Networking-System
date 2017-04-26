@@ -40,6 +40,7 @@ import javax.validation.constraints.Size;
             @NamedQuery(name = "UserProfile.fetchAllRecords" , query = "select u from UserProfile u"),
             @NamedQuery(name = "UserProfile.fetchParticularRecordByEmail" , query = " select u from UserProfile u where u.email = :email"),
             @NamedQuery(name = "UserProfile.updateCityByEmail" , query = " update UserProfile set city = :value1 where email = :value2"),
+            @NamedQuery(name = "UserProfile.updateProfileByUsername" , query = " update UserProfile set streetAddress = :value1,city = :value2,state = :value3,country = :value4, zip = :value5 where email = :value6"),
             //@NamedQuery(name = "UserProfile.getJobCountById" , query = " select count(u) from user_job u where u.jobId = 2"),
                 
             @NamedQuery(name = "UserProfile.findByUsername", query = "select u from UserProfile u where u.user.userName = :username")
@@ -69,7 +70,7 @@ public class UserProfile {
     @OneToMany(mappedBy = "userprofile", cascade = CascadeType.PERSIST)
     private List<Comment> comment;
     
-    @ManyToMany(cascade = CascadeType.PERSIST)
+    @ManyToMany(cascade = CascadeType.ALL)
             @JoinTable(name = "user_job", joinColumns = {
         @JoinColumn(name = "userId")
         }, inverseJoinColumns = {@JoinColumn(name = "jobId")})
@@ -78,15 +79,15 @@ public class UserProfile {
     @OneToMany(mappedBy = "userprofile", cascade = CascadeType.PERSIST)
     private List<Company> company;
     
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String streetAddress;
-@Column(nullable = false)
+@Column(nullable = true)
     private String city;
-@Column(nullable = false)
+@Column(nullable = true)
     private String state;
-@Column(nullable = false)
+@Column(nullable = true)
     private String country;
-@Column(nullable = false)
+@Column(nullable = true)
     private Integer zip;
 
     @OneToOne
@@ -190,7 +191,7 @@ public class UserProfile {
     }
     
     @Column(nullable = false)
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date createdAt;
 
     /**
@@ -281,8 +282,10 @@ public class UserProfile {
 
     @Override
     public String toString() {
-        return "User{" + "userId=" + userId + ", email=" + email + ", firstName=" + firstName + ", lastName=" + lastName + ", createdAt=" + createdAt + '}';
+        return "UserProfile{" + "email=" + email + ", firstName=" + firstName + ", lastName=" + lastName + ", streetAddress=" + streetAddress + ", city=" + city + ", state=" + state + ", country=" + country + ", zip=" + zip + ", user=" + user + ", createdAt=" + createdAt + '}';
     }
+
+    
     
         /**
      * Get the value of zip

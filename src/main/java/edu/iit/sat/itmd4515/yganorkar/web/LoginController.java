@@ -48,7 +48,6 @@ public class LoginController {
      * function to check if the user is an application user having COM_EMP as role
      * @return true if the user has COM_EMP role
      */
-
     
     public boolean isCompanyEmployee(){
         return context.getExternalContext().isUserInRole("COM_EMP");
@@ -73,10 +72,10 @@ public class LoginController {
             return "/login.xhtml";
         }
         if(httpRequest.isUserInRole("APP_USER")){
-            return "/userprofile/jobs.xhtml?faces-redirect=true";
+            return "/userprofile/welcome.xhtml?faces-redirect=true";
         }
         else{
-            return "/company/jobs.xhtml?faces-redirect=true";
+            return "/company/welcome.xhtml?faces-redirect=true";
         }
         
     }

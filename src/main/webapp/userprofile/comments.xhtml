@@ -5,8 +5,7 @@
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 template="./../WEB-INF/templates/authnTheme.xhtml"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
-                xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
-                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+                xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
 
     <ui:define name="title">
     </ui:define>
@@ -74,15 +73,9 @@
                             <div class="form-top">
                                 <div class="form-top-center">
                                     <div style="margin-top: 20px;"></div>
-                                    <h:form class="login-form">
-                                        <h:panelGroup layout="block" class="form-group">
-                                            <h:inputTextarea class="form-username form-control" pt:placeholder="Share Something" binding="#{postDescription}" id="postDescription" ></h:inputTextarea>
-                                            <h:message for="postDescription" class="errorMessage"/>
-                                        </h:panelGroup>
-                                        <h:panelGroup layout="block" class="form-group">
-                                            <h:commandButton class="btn btn-default pull-right" value="Share" action="#{userProfileController.addNewPost(postDescription.value)}"></h:commandButton>
-                                        </h:panelGroup>                                                                            
-                                    </h:form>
+                                    
+                                    
+                                    
                                 </div>
                                 <div class="form-top-right">
                                     <i class="fa fa-lock"></i>
@@ -91,31 +84,23 @@
                             <div style="margin-top: 10px;"></div>
                             <hr></hr>
                             <h:form>
-                                <ui:repeat value="#{userProfileController.allPosts}" var="post">
+                                <h:outputText rendered="false" value="#{request.getAttribute('postId')}" binding="#{postId}" id="postId"></h:outputText>
+                                <ui:repeat value="#{userProfileController.getAllCommentsByPostID(postId.value)}" var="post">
                                     <div class="form-top">
-                                        #{post.description}
-                                        <h:outputText escape="false" rendered="false" value="#{post.postId}" binding="#{postId}"/>
+                                        #{post.commentContent}
+                                        <h:outputText escape="false" rendered="false" value="#{post.post.postId}" binding="#{postId}"/>
                                         <hr></hr>
-                                        <ui:repeat value="#{userProfileController.getAllCommentsByPostID(postId.value)}" var="comment">
-                                            
-                                            <div>
-                                            #{comment.userprofile.firstName} says <h:outputText style="color: white;" value="#{comment.commentContent}"/><br></br>
-                                            </div>
-                                        </ui:repeat>
-                                        
-                                    </div>                                    
+                                        <h:panelGroup layout="block" class="form-group">
+
+                                            <h:inputText class="form-username form-control" binding="#{commentDescription}" pt:placeholder="Comment" id="commentDescription"></h:inputText>
+                                            <h:commandButton value="Comment" action="#{userProfileController.addNewComment(commentDescription.value, postId.value)}" ></h:commandButton>
+                                            <h:message for="commentDescription" class="errorMessage"/>
+                                        </h:panelGroup>
+                                        <h:commandLink onclick="$('#myModal').modal('show'); return true;" style="margin-top: 17px; margin-left: 25px;" value="View Comments"></h:commandLink>                                        
+                                    </div>
                                     <div style="margin-top: 3px;"></div>
-                                    <div class="row">
-                                            <h:panelGroup layout="block" class="form-group">
-                                                
-                                                <h:inputText class="form-username form-control" binding="#{commentDescription}" pt:placeholder="Comment" id="commentDescription"></h:inputText>
-                                                <h:commandButton value="Comment" action="#{userProfileController.addNewComment(commentDescription.value, postId.value)}" ></h:commandButton>
-                                                <h:message for="commentDescription" class="errorMessage"/>
-                                                
-                                            </h:panelGroup>                                            
-                                        </div>
                                 </ui:repeat>                            
-                            </h:form>
+                                </h:form>
                         </div>
                     </div>
                 </div>
@@ -130,6 +115,8 @@
             </div>
         </div>
         <!-- /.container -->
+        
+        
 
     </ui:define>
 

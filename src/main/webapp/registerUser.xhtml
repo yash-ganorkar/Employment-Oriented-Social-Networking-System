@@ -1,6 +1,7 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 template="./WEB-INF/templates/publicTheme.xhtml"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
@@ -46,26 +47,26 @@
                             <div class="form-bottom">
                                 <h:form class="login-form">
                                     <h:panelGroup layout="block" class="form-group">
-                                        <h:inputText class="form-username form-control" pt:placeholder="First Name" id="firstName" ></h:inputText>
+                                        <h:inputText class="form-username form-control" pt:placeholder="First Name" id="firstName" binding="#{firstName}" ></h:inputText>
                                         <h:message for="firstName" class="errorMessage"/>
                                     </h:panelGroup>
                                     <h:panelGroup layout="block" class="form-group">
-                                        <h:inputText class="form-username form-control" pt:placeholder="Last Name" id="lastName" ></h:inputText>
+                                        <h:inputText class="form-username form-control" pt:placeholder="Last Name" id="lastName" binding="#{lastName}"></h:inputText>
                                         <h:message for="lastName" class="errorMessage"/>
                                     </h:panelGroup>
                                     <h:panelGroup layout="block" class="form-group">
-                                        <h:inputText class="form-username form-control" pt:placeholder="Email" id="email" ></h:inputText>
+                                        <h:inputText class="form-username form-control" pt:placeholder="Email" id="email" binding="#{email}"></h:inputText>
                                         <h:message for="email" class="errorMessage"/>
                                     </h:panelGroup>
                                     <h:panelGroup layout="block" class="form-group">
-                                        <h:inputText class="form-username form-control" pt:placeholder="Username" id="username" ></h:inputText>
+                                        <h:inputText class="form-username form-control" pt:placeholder="Username" id="username" binding="#{username}"></h:inputText>
                                         <h:message for="username" class="errorMessage"/>
                                     </h:panelGroup>                                                                        
                                     <h:panelGroup layout="block" class="form-group">
-                                        <h:inputSecret class="form-username form-control" pt:placeholder="Password" id="password" ></h:inputSecret>
+                                        <h:inputSecret class="form-username form-control" pt:placeholder="Password" id="password" binding="#{password}"></h:inputSecret>
                                         <h:message for="password" class="errorMessage"/>
                                     </h:panelGroup>                                                                                                            
-                                    <h:commandButton class="btn" value="Register" onclick="alert('Job seeker will be registered...');"></h:commandButton>
+                                    <h:commandButton class="btn" value="Register" action="#{userProfileController.registerUser(email.value, firstName.value, lastName.value, username.value, password.value )}"></h:commandButton>
                                 </h:form>
                                 <!--                                        <a href="http://localhost:8080/yganorkar-fp/userprofile/createuseraccount.html" role="button" class="btn btn-primary">Register</a>-->
                             </div>

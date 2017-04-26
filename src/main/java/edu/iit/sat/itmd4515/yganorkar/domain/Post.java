@@ -29,7 +29,7 @@ import javax.validation.constraints.Size;
 @Table(name = "post")
 @NamedQueries({
         @NamedQuery(name = "Post.fetchAllRecords", query = "SELECT p from Post p"),
-        @NamedQuery(name = "Post.fetchAllRecordsByUserId", query = "SELECT p from Post p where p.userId = :value1"),
+        @NamedQuery(name = "Post.fetchAllRecordsByUserId", query = "SELECT p from Post p where p.userprofile.userId = :value1"),
         @NamedQuery(name = "Post.fetchAllRecordsByPostId", query = "SELECT p from Post p where p.postId = :value1"),
         @NamedQuery(name = "Post.updateDescriptionAndLikesByPostId", query = "update Post set description = :value1, likes = :value2 where postId = :value3")
 })
@@ -40,11 +40,9 @@ public class Post {
     @GeneratedValue (strategy = GenerationType.IDENTITY)
     private Long postId;
 
-    private Long userId;
-
     private Integer likes;
 
-    @Temporal(javax.persistence.TemporalType.DATE)
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date createdAt;
 
     @Column(nullable = false)
@@ -98,14 +96,11 @@ public class Post {
     }
     
     /**
-     *
-     * @param userId
      * @param likes
      * @param createdAt
      * @param description
      */
-    public Post(Long userId, Integer likes, Date createdAt, String description) {
-        this.userId = userId;
+    public Post(Integer likes, Date createdAt, String description) {
         this.likes = likes;
         this.createdAt = createdAt;
         this.description = description;
@@ -166,24 +161,6 @@ public class Post {
     }
 
     /**
-     * Get the value of userId
-     *
-     * @return the value of userId
-     */
-    public Long getUserId() {
-        return userId;
-    }
-
-    /**
-     * Set the value of userId
-     *
-     * @param userId new value of userId
-     */
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
-
-    /**
      *
      */
     public Post() {
@@ -207,7 +184,6 @@ public class Post {
 
     @Override
     public String toString() {
-        return "Post{" + "postId=" + postId + ", userId=" + userId + ", likes=" + likes + ", createdAt=" + createdAt + ", description=" + description + '}';
+        return "Post{" + "postId=" + postId + ", likes=" + likes + ", createdAt=" + createdAt + ", description=" + description + '}';
     }
-
 }

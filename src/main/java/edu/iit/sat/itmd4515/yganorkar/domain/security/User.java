@@ -35,6 +35,8 @@ public class User {
         
         public User() {
         }
+        
+        
 
         @ManyToMany
         @JoinTable(name = "sec_user_groups", joinColumns = @JoinColumn(name = "USERNAME"), inverseJoinColumns = @JoinColumn(name = "GROUPNAME"))

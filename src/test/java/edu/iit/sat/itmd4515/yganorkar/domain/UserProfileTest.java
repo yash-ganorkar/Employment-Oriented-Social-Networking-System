@@ -30,192 +30,201 @@ import static org.junit.Assert.*;
 
 /**
  * Class containing JUnit Test Cases for UserProfile Class.
+ *
  * @author Yash Ravindra Ganorkar (A20373298)
  */
 public class UserProfileTest {
-    
+
     private static EntityManagerFactory entityManagerFactory;
     private EntityManager entityManager;
     private EntityTransaction entityTransaction;
     private static Logger LOGGER = Logger.getLogger(UserProfile.class.getName());
 
-    private static Validator validator;    
+    private static Validator validator;
+
     /**
-     * setUpClass() initialize EntityManagerFactory to avoid code repetition. Runs at the beginning
+     * setUpClass() initialize EntityManagerFactory to avoid code repetition.
+     * Runs at the beginning
      */
     @BeforeClass
     public static void setUpClass() {
         entityManagerFactory = Persistence.createEntityManagerFactory("itmd4515PU_TEST");
         validator = Validation.buildDefaultValidatorFactory().getValidator();
     }
-    
+
     /**
-     * tearDownClass() closes EntityManagerFactory object created in setUpCode(). Runs at the end
+     * tearDownClass() closes EntityManagerFactory object created in
+     * setUpCode(). Runs at the end
      */
     @AfterClass
     public static void tearDownClass() {
-                
+
         entityManagerFactory.close();
     }
 
     /**
-     * setUp() initializes EntityManager and EntityTransaction objects. Inserts the user object in the database.
+     * setUp() initializes EntityManager and EntityTransaction objects. Inserts
+     * the user object in the database.
      */
-    
     @Before
     public void setUp() {
         entityManager = entityManagerFactory.createEntityManager();
         entityTransaction = entityManager.getTransaction();
 
-        UserProfile user = new UserProfile("brucewayne@waynetech.com", "Bruce", "Wayne", new GregorianCalendar(2010,5,7).getTime(), "Wayne Manor","Gotham City", "Illinois", "USA", 60616);
+        UserProfile user = new UserProfile("brucewayne@waynetech.com", "Bruce", "Wayne", new GregorianCalendar(2010, 5, 7).getTime(), "Wayne Manor", "Gotham City", "Illinois", "USA", 60616);
         entityTransaction.begin();
         entityManager.persist(user);
         entityTransaction.commit();
-       
+
     }
-    
+
     /**
-     * persistNewUserTest() adds users to the database. Throws RollbackException if the user tries to enter a new UserProfile
- with same Username as the one present in the database.
+     * persistNewUserTest() adds users to the database. Throws RollbackException
+     * if the user tries to enter a new UserProfile with same Username as the
+     * one present in the database.
      */
     @Test(expected = RollbackException.class)
-    public void persistNewUserTest(){
+    public void persistNewUserTest() {
         //sunny day test
-        UserProfile user = new UserProfile("clarkkent@dailyplanet.com", "Clark", "Kent", new GregorianCalendar(2014,5,7).getTime(),"Kent Building","Metropolis", "Illinois", "USA", 60626);
-        
+        UserProfile user = new UserProfile("clarkkent@dailyplanet.com", "Clark", "Kent", new GregorianCalendar(2014, 5, 7).getTime(), "Kent Building", "Metropolis", "Illinois", "USA", 60626);
+
         entityTransaction.begin();
-        assertNull("User ID must be null" , user.getUserId());
+        assertNull("User ID must be null", user.getUserId());
         entityManager.persist(user);
         entityTransaction.commit();
-        
-        assertTrue("User ID must be greater than 0." , user.getUserId() > 0);
+
+        assertTrue("User ID must be greater than 0.", user.getUserId() > 0);
         //sunny day test
-        user = new UserProfile("berryallen@justiceleague.com", "Berry", "Allen", new GregorianCalendar(2016,5,7).getTime(),"300 East Michigan Ave","Chicago", "Illinois", "USA", 60606);
+        user = new UserProfile("berryallen@justiceleague.com", "Berry", "Allen", new GregorianCalendar(2016, 5, 7).getTime(), "300 East Michigan Ave", "Chicago", "Illinois", "USA", 60606);
         entityTransaction.begin();
         entityManager.persist(user);
         entityTransaction.commit();
-        
-        user = new UserProfile("email@gmail.com", "firstName", "lastName", new GregorianCalendar(2010,5,7).getTime(),"streetAddress","city", "state", "country", 60616);
+
+        user = new UserProfile("email@gmail.com", "firstName", "lastName", new GregorianCalendar(2010, 5, 7).getTime(), "streetAddress", "city", "state", "country", 60616);
         entityTransaction.begin();
         entityManager.persist(user);
         entityTransaction.commit();
-        
 
         //rainy day test
-        user = new UserProfile("brucewayne@waynetech.com", "Bruce", "Wayne", new GregorianCalendar(2010,5,7).getTime(),"Wayne Manor","Gotham City", "Illinois", "USA", 60616);
+        user = new UserProfile("brucewayne@waynetech.com", "Bruce", "Wayne", new GregorianCalendar(2010, 5, 7).getTime(), "Wayne Manor", "Gotham City", "Illinois", "USA", 60616);
         entityTransaction.begin();
         entityManager.persist(user);
         entityTransaction.commit();
-        
+
     }
 
     /**
-     * fetchAllUsers() fetches all the users from the database. Throws IndexOutOfBoundException.
+     * fetchAllUsers() fetches all the users from the database. Throws
+     * IndexOutOfBoundException.
      */
-    
     @Test(expected = IndexOutOfBoundsException.class)
-    public void fetchAllUsers(){
-        
+    public void fetchAllUsers() {
+
         List<UserProfile> listOfUsers = entityManager.createNamedQuery("UserProfile.fetchAllRecords").getResultList();
         //sunny day asserts
         assertTrue("Size is always greater than 0.", listOfUsers.size() > 0);
         assertNotNull("List object is not null", listOfUsers);
-        
+
         //rainy day asserts
         assertEquals("Berry", listOfUsers.get(300));
-        
-    }
-    
-    /**
-     * updateUser() updates a particular user's password by fetching a particular user from the database using JPQL Query. 
-     * Throws NoResultException when no result is returned by the query.
-     */
-    
-    @Test(expected = NoResultException.class)
-    public void updateUser(){
 
-        UserProfile user =  entityManager.createNamedQuery("UserProfile.fetchParticularRecordByEmail", UserProfile.class)
-                                         .setParameter("email", "berryallen@justiceleague.com")
-                                         .getSingleResult();
-        
+    }
+
+    /**
+     * updateUser() updates a particular user's password by fetching a
+     * particular user from the database using JPQL Query. Throws
+     * NoResultException when no result is returned by the query.
+     */
+    @Test(expected = NoResultException.class)
+    public void updateUser() {
+
+        UserProfile user = entityManager.createNamedQuery("UserProfile.fetchParticularRecordByEmail", UserProfile.class)
+                .setParameter("email", "brucewayne@waynetech.com")
+                .getSingleResult();
+
         user.setCity("Brooklyn");
         //sunny day assert
-        assertSame("Berry", user.getFirstName());
+        assertSame("Bruce", user.getFirstName());
 
-        
         entityTransaction.begin();
         entityManager.createNamedQuery("UserProfile.updateCityByEmail", UserProfile.class)
-                     .setParameter("value1", user.getCity())
-                     .setParameter("value2", user.getEmail())
-                     .executeUpdate();
+                .setParameter("value1", user.getCity())
+                .setParameter("value2", user.getEmail())
+                .executeUpdate();
         entityManager.refresh(user);
         entityTransaction.commit();
+        
+        user = entityManager.createNamedQuery("UserProfile.fetchParticularRecordByEmail", UserProfile.class)
+                .setParameter("email", "brucewayne@waynetech.com")
+                .getSingleResult();
 
-        user =  entityManager.createNamedQuery("UserProfile.fetchParticularRecordByEmail", UserProfile.class)
-                                         .setParameter("email", "tonystark@avengers.com")
-                                         .getSingleResult();
+        user = entityManager.createNamedQuery("UserProfile.fetchParticularRecordByEmail", UserProfile.class)
+                .setParameter("email", "tonystark@avengers.com")
+                .getSingleResult();
         //rainy day assert
-        assertNotNull(user);        
+        assertNotNull(user);
     }
-    
+
     /**
-     * deleteUser() deletes the record fetched from database using email id of the user.
-     * Throws NoResultException when tried to search for the deleted record.
+     * deleteUser() deletes the record fetched from database using email id of
+     * the user. Throws NoResultException when tried to search for the deleted
+     * record.
      */
     @Test(expected = NoResultException.class)
-    public void deleteUser(){
+    public void deleteUser() {
 
-        UserProfile seed =  entityManager.createNamedQuery("UserProfile.fetchParticularRecordByEmail", UserProfile.class)
-                                         .setParameter("email", "berryallen@justiceleague.com")
-                                         .getSingleResult();
+        UserProfile seed = entityManager.createNamedQuery("UserProfile.fetchParticularRecordByEmail", UserProfile.class)
+                .setParameter("email", "berryallen@justiceleague.com")
+                .getSingleResult();
         //sunny day test
         assertNotNull(seed);
-        
+
         entityTransaction.begin();
         //sunny day test
         assertTrue("First name is Berry", seed.getFirstName().equals("Berry"));
         entityManager.remove(seed);
         entityTransaction.commit();
-        
-        seed =  entityManager.createNamedQuery("UserProfile.fetchParticularRecordByEmail", UserProfile.class)
-                                         .setParameter("email", "berryallen@justiceleague.com")
-                                         .getSingleResult();
+
+        seed = entityManager.createNamedQuery("UserProfile.fetchParticularRecordByEmail", UserProfile.class)
+                .setParameter("email", "berryallen@justiceleague.com")
+                .getSingleResult();
         //rainy day test
         assertNull(seed);
-        
+
     }
-    
+
     /**
-    * fetchCommentUsingFind() searches for particular user in the database using EntityManager.find() method. 
-    * Throws NullPointerException when no result is returned by the find() method.
-    */
+     * fetchCommentUsingFind() searches for particular user in the database
+     * using EntityManager.find() method. Throws NullPointerException when no
+     * result is returned by the find() method.
+     */
     @Test(expected = NullPointerException.class)
-    public void fetchCommentUsingFind(){
+    public void fetchCommentUsingFind() {
         //sunny day assert
         UserProfile user = entityManager.find(UserProfile.class, 2l);
-        
+
         LOGGER.info(user.toString());
         //sunny day asserts
         assertNotNull(user);
-        assertSame("Email id is same", "clarkkent@dailyplanet.com",user.getEmail());
-        
+        assertSame("Email id is same", "clarkkent@dailyplanet.com", user.getEmail());
+
         //rainy day test
         user = entityManager.find(UserProfile.class, 500l);
         LOGGER.info(user.toString());
-}
-
-    /**
-     * Bean validation checking for length of password in UserProfile entity. Sunny day test case.
-     */        
-    @Test
-    public void validatePassword(){
-
-        UserProfile user = new UserProfile("clarkkent@dailyplanet.com", "Clark", "Kent", new GregorianCalendar(2014,5,7).getTime(),"Kent Building","Metropolis", "Illinois", "USA", 60626);
-        
-        Set<ConstraintViolation<UserProfile>> violations = validator.validate(user);
-        assertTrue(violations.isEmpty());
-
     }
+
+//    /**
+//     * Bean validation checking for length of password in UserProfile entity. Sunny day test case.
+//     */        
+//    @Test
+//    public void validatePassword(){
+//
+//        UserProfile user = new UserProfile("clarkkent@dailyplanet.com", "Clark", "Kent", new GregorianCalendar(2014,5,7).getTime(),"Kent Building","Metropolis", "Illinois", "USA", 60626);
+//        
+//        Set<ConstraintViolation<UserProfile>> violations = validator.validate(user);
+//        assertTrue(violations.isEmpty());
+//
+//    }
 //
 //    /**
 //     * Bean validation checking for length of password in UserProfile entity. Rainy day test case.
@@ -236,158 +245,183 @@ public class UserProfileTest {
 //        assertEquals(violations.size(),2);
 //
 //    }
-
+//------------
     /**
      * Testing OneToMany relationship between UserProfile and Post entity.
      * UserProfile being the non-owning side or inverse side.
-     */    
-    
+     */
     @Test
-    public void testOneToManyUserPostRelationship(){
+    public void testOneToManyUserPostRelationship() {
         UserProfile user = entityManager.createNamedQuery("UserProfile.fetchParticularRecordByEmail", UserProfile.class)
-                                 .setParameter("email", "email@gmail.com")
-                                 .getSingleResult();
-        
+                .setParameter("email", "brucewayne@waynetech.com")
+                .getSingleResult();
+
         List<Post> listOfPosts = new ArrayList<>();
-        Post p1 = new Post(null, 5, new GregorianCalendar(2014,5,7).getTime(), "India wins the 2011 Cricket World Cup by beating Srilanka.");
-         p1.setUserprofile(user);
+        Post p1 = new Post(5, new GregorianCalendar(2014, 5, 7).getTime(), "India wins the 2011 Cricket World Cup by beating Srilanka.");
+        p1.setUserprofile(user);
         listOfPosts.add(p1);
-        p1 = new Post(null, 5, new GregorianCalendar(2004,5,7).getTime(), "Al-Qaeda strikes back at United States.");
-                 p1.setUserprofile(user);
+        p1 = new Post(5, new GregorianCalendar(2004, 5, 7).getTime(), "Al-Qaeda strikes back at United States.");
+        p1.setUserprofile(user);
         listOfPosts.add(p1);
-        p1 = new Post(null, 5, new GregorianCalendar(1999,5,7).getTime(), "Bush becomes the new POTUS.");
-                 p1.setUserprofile(user);
+        p1 = new Post(5, new GregorianCalendar(1999, 5, 7).getTime(), "Bush becomes the new POTUS.");
+        p1.setUserprofile(user);
         listOfPosts.add(p1);
-           
+
         user.setPost(listOfPosts);
         entityTransaction.begin();
         entityManager.persist(user);
         entityTransaction.commit();
-        
+
         Query query = entityManager.createQuery("SELECT p FROM Post p where p.userprofile.userId = :value1").setParameter("value1", user.getUserId());
 
         List<Post> listOfPost = query.getResultList();
 
-        for(int i=0;i<listOfPost.size();i++){
-            LOGGER.log(Level.SEVERE,listOfPost.get(i).toString());
+        for (int i = 0; i < listOfPost.size(); i++) {
+            LOGGER.log(Level.SEVERE, listOfPost.get(i).toString());
         }
     }
 
     /**
      * Testing OneToMany relationship between UserProfile and Comment entity.
      * UserProfile being the non-owning side or inverse side.
-     */    
-    
+     */
     @Test
-    public void testOneToManyUserCommentRelationship(){
+    public void testOneToManyUserCommentRelationship() {
 
         UserProfile user = entityManager.createNamedQuery("UserProfile.fetchParticularRecordByEmail", UserProfile.class)
-                                 .setParameter("email", "email@gmail.com")
-                                 .getSingleResult();
+                .setParameter("email", "brucewayne@waynetech.com")
+                .getSingleResult();
 
-        Post post = entityManager.createNamedQuery("Post.fetchAllRecordsByPostId", Post.class)
-                                 .setParameter("value1", 2l)
-                                 .getSingleResult();
-
-        
         List<Comment> listOfComment = new ArrayList<>();
-        Comment c1 = new Comment(post.getPostId(), "Yes. I knew that he would be the new POTUS.", user.getUserId(),new GregorianCalendar(1999,5,7).getTime());
+        Comment c1 = new Comment("Yes. I knew that he would be the new POTUS.", new GregorianCalendar(1999, 5, 7).getTime());
         c1.setUserprofile(user);
         listOfComment.add(c1);
-           
+
         user.setComment(listOfComment);
         entityTransaction.begin();
         entityManager.createNamedQuery("UserProfile.updateCityByEmail", UserProfile.class)
-                     .setParameter("value1", user.getCity())
-                     .setParameter("value2", user.getEmail())
-                     .executeUpdate();
+                .setParameter("value1", user.getCity())
+                .setParameter("value2", user.getEmail())
+                .executeUpdate();
         entityManager.refresh(user);
         entityTransaction.commit();
-        
+
     }
 
     /**
      * Testing OneToMany relationship between UserProfile and Job entity.
      * UserProfile being the non-owning side or inverse side.
-     */    
-    
+     */
     @Test
-    public void testOneToManyUserJobRelationship(){
-        
+    public void testOneToManyUserJobRelationship() {
+
         UserProfile user = entityManager.createNamedQuery("UserProfile.fetchParticularRecordByEmail", UserProfile.class)
-                                 .setParameter("email", "email@gmail.com")
-                                 .getSingleResult();
+                .setParameter("email", "brucewayne@waynetech.com")
+                .getSingleResult();
 
         List<UserProfile> listOfUser = new ArrayList<>();
-        
+
         listOfUser.add(user);
 
-        Company company = new Company("Stark Industries", "tonystark@starkindustries.com", "New York City", 10000, "Private", "Owned by famous Tony Stark.", new GregorianCalendar(1950,5,7).getTime());        
+        Company company = new Company("Stark Industries", "tonystark@starkindustries.com", "New York City", 10000, "Private", "Owned by famous Tony Stark.", new GregorianCalendar(1950, 5, 7).getTime());
 
         entityTransaction.begin();
         entityManager.persist(company);
         entityTransaction.commit();
-        
+
         List<Job> listOfJob = new ArrayList<>();
-        Job j1 = new Job("Software Engineer Internship", "Software Development", "Intern", 110000D, new GregorianCalendar(2014,5,7).getTime());
+        Job j1 = new Job("Software Engineer Internship", "Software Development", "Intern", 110000D, new GregorianCalendar(2014, 5, 7).getTime());
         j1.setUserprofile(listOfUser);
         listOfJob.add(j1);
 
-        j1 = new Job("Software Engineer Internship - 2", "Software Development", "Intern", 110000D, new GregorianCalendar(2015,5,7).getTime());
+        j1 = new Job("Software Engineer Internship - 2", "Software Development", "Intern", 110000D, new GregorianCalendar(2015, 5, 7).getTime());
         j1.setUserprofile(listOfUser);
-        listOfJob.add(j1);        
+        listOfJob.add(j1);
 
-        j1 = new Job("Software Engineer Internship - 3", "Software Development", "Intern", 90000D, new GregorianCalendar(2013,5,7).getTime());
+        j1 = new Job("Software Engineer Internship - 3", "Software Development", "Intern", 90000D, new GregorianCalendar(2013, 5, 7).getTime());
         j1.setUserprofile(listOfUser);
-        listOfJob.add(j1);        
-                   
+        listOfJob.add(j1);
+
         user.setJob(listOfJob);
         entityTransaction.begin();
         entityManager.persist(user);
         entityTransaction.commit();
-        
+
     }
 
     /**
      * Testing OneToMany relationship between UserProfile and Company entity.
      * UserProfile being the non-owning side or inverse side.
-     */    
-    
+     */
     @Test
-    public void testOneToManyUserCompanyRelationship(){
-        
+    public void testOneToManyUserCompanyRelationship() {
+
         UserProfile user = entityManager.createNamedQuery("UserProfile.fetchParticularRecordByEmail", UserProfile.class)
-                                 .setParameter("email", "email@gmail.com")
-                                 .getSingleResult();
+                .setParameter("email", "brucewayne@waynetech.com")
+                .getSingleResult();
 
         List<Company> listOfCompany = entityManager.createNamedQuery("Company.fetchAllRecords", Company.class)
-                                 .getResultList();
-        
-        
-        for(int i=0;i<listOfCompany.size();i++){
-            LOGGER.log(Level.SEVERE,listOfCompany.get(i).toString());
+                .getResultList();
+
+        for (int i = 0; i < listOfCompany.size(); i++) {
+            LOGGER.log(Level.SEVERE, listOfCompany.get(i).toString());
         }
 
     }
-    
-        
-    
-     /**
-     * tearDown() closes the EntityManager object and deletes the record from the database.
+
+    /**
+     * tearDown() closes the EntityManager object and deletes the record from
+     * the database.
      */
-       
     @After
     public void tearDown() {
-        UserProfile seed =  entityManager.createNamedQuery("UserProfile.fetchParticularRecordByEmail", UserProfile.class)
-                                         .setParameter("email", "brucewayne@waynetech.com")
-                                         .getSingleResult();
-        
-        assertNotNull(seed);
-        
-        entityTransaction.begin();
-        entityManager.remove(seed);
-        entityTransaction.commit();
 
+        List<Job> jobs = entityManager.createNamedQuery("Job.fetchAllRecords", Job.class)
+                .getResultList();
+
+        for (Job job : jobs) {
+            entityTransaction.begin();
+            entityManager.remove(job);
+            entityTransaction.commit();
+        }
+
+        List<Comment> comments = entityManager.createNamedQuery("Comment.fetchAllRecords", Comment.class)
+                .getResultList();
+
+        for (Comment comment : comments) {
+            entityTransaction.begin();
+            entityManager.remove(comment);
+            entityTransaction.commit();
+        }
+
+        List<Company> companies = entityManager.createNamedQuery("Company.fetchAllRecords", Company.class)
+                .getResultList();
+
+        for (Company company : companies) {
+            entityTransaction.begin();
+            entityManager.remove(company);
+            entityTransaction.commit();
+        }
+
+        List<Post> post = entityManager.createNamedQuery("Post.fetchAllRecords", Post.class)
+                .getResultList();
+
+        assertNotNull(post);
+        for (Post posts : post) {
+            entityTransaction.begin();
+            entityManager.remove(posts);
+            entityTransaction.commit();
+        }
+
+        List<UserProfile> seeds = entityManager.createNamedQuery("UserProfile.fetchAllRecords", UserProfile.class)
+                .getResultList();
+
+        assertNotNull(seeds);
+        for (UserProfile seed : seeds) {
+            entityTransaction.begin();
+            entityManager.remove(seed);
+            entityTransaction.commit();
+        }
         entityManager.close();
     }
 

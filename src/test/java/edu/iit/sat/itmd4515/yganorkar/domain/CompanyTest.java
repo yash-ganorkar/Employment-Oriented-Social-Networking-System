@@ -123,7 +123,7 @@ public class CompanyTest {
         
         assertTrue("Size is always greater than 0.", listOfCompanies.size() > 0);
         assertNotNull("List object is not null", listOfCompanies);
-        assertEquals("Size should be 2", listOfCompanies.size(),3);
+        assertEquals("Size should be 1", listOfCompanies.size(),1);
         
         assertEquals("Wayne Enterprises", listOfCompanies.get(5));
         
@@ -282,7 +282,7 @@ public class CompanyTest {
     public void testOneToManyCompanyJobBiDirectionalRelationship(){
 
         Company company = entityManager.createNamedQuery("Company.fetchAllRecordsByEmail", Company.class)
-                                 .setParameter("value1", "tonystark@starkindustries.com")
+                                 .setParameter("value1", "brucewayne@wayneenterprises.com")
                                  .getSingleResult();
         
         List<Job> listOfJobs = new ArrayList<>();
@@ -301,15 +301,28 @@ public class CompanyTest {
      */
     @After
     public void tearDown() {
-        Company company =  entityManager.createNamedQuery("Company.fetchAllRecordsByEmail", Company.class)
-                                         .setParameter("value1", "brucewayne@wayneenterprises.com")
-                                         .getSingleResult();
         
-        assertNotNull(company);
+        List<Job> jobs =  entityManager.createNamedQuery("Job.fetchAllRecords", Job.class)
+                                         .getResultList();
+
+    for(Job job: jobs){
+        entityTransaction.begin();
+        entityManager.remove(job);
+        entityTransaction.commit();
+        }
         
+        
+        List<Company> companies =  entityManager.createNamedQuery("Company.fetchAllRecords", Company.class)
+                                         .getResultList();
+        
+        
+        assertNotNull(companies);
+        
+        for(Company company : companies){
         entityTransaction.begin();
         entityManager.remove(company);
         entityTransaction.commit();
+        }
 
     entityManager.close();
     }

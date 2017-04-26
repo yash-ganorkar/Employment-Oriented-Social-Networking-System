@@ -30,14 +30,18 @@
 
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                     <ul class="nav navbar-nav pull-right">
-                        <li>
-                            <a href="#">Home</a>
+                        <li style="margin-top: 10px;">
+                            <h:form>
+                            <h:commandLink action="#{navigationController.navigateToHome()}" style="margin-left: 25px;" value="Home"></h:commandLink>
+                            </h:form>
                         </li>                                
                         <li>
                             <a href="#">Company Profile</a>
                         </li>
-                        <li>
-                            <a href="#">Jobs</a>
+                        <li style="margin-top: 10px;">
+                            <h:form>
+                            <h:commandLink action="#{navigationController.navigateToJobs()}" style="margin-left: 10px;" value="Jobs"></h:commandLink>
+                            </h:form>
                         </li>
                         
                         <li style="margin-top: 10px;">
